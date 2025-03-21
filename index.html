@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>VSCode主题转Sakura Editor</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>VSCode主题转换器</h1>
+        
+        <!-- 文件上传区域 -->
+        <div class="upload-section">
+            <input type="file" id="themeFile" accept=".json">
+            <label for="themeFile" class="upload-btn">选择VSCode主题文件</label>
+            <span id="fileName"></span>
+        </div>
+
+        <!-- 实时预览 -->
+        <div class="preview">
+            <div id="editorPreview" class="editor-window">
+                <div class="code-sample">
+                    <span class="keyword">function</span> <span class="function">example</span>() {<br>
+                    &nbsp;&nbsp;<span class="comment">// 示例代码</span><br>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- 下载按钮 -->
+        <button id="downloadBtn" disabled>下载.col文件</button>
+
+        <!-- 颜色映射表 -->
+        <div class="color-grid" id="colorGrid"></div>
+    </div>
+
+    <script src="js/converter.js"></script>
+</body>
+</html>
