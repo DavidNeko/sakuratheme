@@ -1,0 +1,12 @@
+{
+    "name": "Light Theme",
+    "colors": {
+        "editor.background": "#ffffff",
+        "editor.foreground": "#333333",
+        "editor.selectionBackground": "#add6ff",
+        "editorLineNumber.foreground": "#237893",
+        "editorCursor.foreground": "#000000",
+        "editorSuggestWidget.background": "#f3f3f3",
+        "editorSuggestWidget.foreground": "#000000"
+    }
+}
