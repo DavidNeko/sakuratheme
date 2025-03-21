@@ -1,0 +1,12 @@
+{
+    "name": "Dark Theme",
+    "colors": {
+        "editor.background": "#1e1e1e",
+        "editor.foreground": "#d4d4d4",
+        "editor.selectionBackground": "#264f78",
+        "editorLineNumber.foreground": "#858585",
+        "editorCursor.foreground": "#aeafad",
+        "editorSuggestWidget.background": "#252526",
+        "editorSuggestWidget.foreground": "#d4d4d4"
+    }
+}
