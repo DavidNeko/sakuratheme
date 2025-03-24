@@ -61,19 +61,20 @@ const DEFAULT_COLORS = {
 };
 
 const VSCODE_MAPPING = {
-    // VSCode属性到Sakura键的映射
+    // 增加对新版VSCode主题的支持
     'editor.background': 'EBK',
     'editor.foreground': 'TXT',
     'editorCursor.foreground': 'CAR',
     'editor.selectionBackground': 'SEL',
-    'editor.lineHighlightBackground': 'CBK',
     'editorLineNumber.foreground': 'LNO',
+    'editor.findMatchBackground': 'FND',
     'editorBracketMatch.border': 'BRC',
-    'editor.findMatchHighlightBackground': 'FND',
-    'comments': 'CMT',
-    'strings': 'SQT',
-    'numbers': 'NUM',
-    'keywords': 'KW1'
+    
+    // 新增映射
+    'textLink.foreground': 'URL',
+    'editorGutter.modifiedBackground': 'MOD',
+    'editorGutter.addedBackground': 'DFC',
+    'editorGutter.deletedBackground': 'DFD'
 };
 
 document.getElementById('themeFile').addEventListener('change', function(e) {
@@ -96,9 +97,16 @@ document.getElementById('themeFile').addEventListener('change', function(e) {
 });
 
 function convertTheme(vsTheme) {
+    // 过滤VSCode特殊字段
+    const cleanTheme = {
+        name: vsTheme.name,
+        colors: vsTheme.colors || {},
+        tokenColors: vsTheme.tokenColors || []
+    };
+    
     let config = [
         '; テキストエディタ色設定 Ver3',
-        `; Generated from: ${vsTheme.name || 'Unknown Theme'}`,
+        `; Generated from: ${cleanTheme.name || 'Unknown Theme'}`,
         '[SakuraColor]'
     ];
 
@@ -122,8 +130,8 @@ function findVSCodeKey(sakuraKey) {
 }
 
 function getColorValue(theme, vsKey) {
-    // 从colors获取
-    if (vsKey && theme.colors?.[vsKey]) {
+    // 优先从colors获取
+    if (vsKey && theme.colors[vsKey]) {
         return {
             fg: theme.colors[vsKey],
             bg: theme.colors['editor.background']
@@ -131,19 +139,13 @@ function getColorValue(theme, vsKey) {
     }
     
     // 从tokenColors获取
-    if (vsKey) {
-        const token = theme.tokenColors?.find(t => 
-            t.scope?.split(',').includes(vsKey)
-        );
-        if (token) {
-            return {
-                fg: token.settings?.foreground,
-                bg: token.settings?.background
-            };
-        }
-    }
-    
-    return null;
+    const token = theme.tokenColors.find(t => 
+        t.scope?.split(',').includes(vsKey)
+    );
+    return token?.settings ? {
+        fg: token.settings.foreground,
+        bg: token.settings.background
+    } : null;
 }
 
 // HEX转RRGGBB格式
