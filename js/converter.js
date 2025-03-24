@@ -150,8 +150,8 @@ function convertTheme(vsTheme) {
         const safeFg = color?.fg ? color.fg.toString() : defaultFg;
         const safeBg = color?.bg ? color.bg.toString() : defaultBg;
         
-        const fg = hexToRgb(safeFg);
-        const bg = hexToRgb(safeBg);
+        const fg = hexToRgb(safeFg).toLowerCase();
+        const bg = hexToRgb(safeBg).toLowerCase();
         
         config.push(`C[${key}]=${display},${bold},${fg},${bg},${underline}`);
     });
@@ -185,7 +185,7 @@ function getColorValue(theme, vsKey) {
     });
     
     return token?.settings ? {
-        fg: token.settings.foreground,
+        fg: token.settings?.foreground,
         bg: token.settings.background || DEFAULT_BG
     } : null;
 }
@@ -205,7 +205,7 @@ function hexToRgb(hex) {
     return value
         .padEnd(6, '0')    // 确保至少6字符
         .substring(0, 6)    // 最多取6字符
-        .toUpperCase();     // 统一大写
+        .toLowerCase();     // 统一大写
 }
 
 // 保持原有预览功能
