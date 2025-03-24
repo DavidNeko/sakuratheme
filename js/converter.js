@@ -1,19 +1,79 @@
 // 颜色映射配置（新版格式）
-const COLOR_MAPPING = {
-    // 基础颜色映射
-    'editor.background': ['EBK', [0, 0, '000000', 'F3F3F3', 0]],
-    'editor.foreground': ['TXT', [0, 0, '333333', 'FFFFFF', 0]],
-    'editorCursor.foreground': ['CAR', [0, 0, '000000', 'FFFFFF', 0]],
-    'editor.selectionBackground': ['SEL', [0, 1, '264F78', 'FFFFFF', 0]],
-    'editorLineNumber.foreground': ['LNO', [0, 0, '858585', 'FFFFFF', 0]],
-    
-    // 语法高亮扩展
-    'editorSuggestWidget.background': ['PopupBg', [0, 0, '252526', 'FFFFFF', 0]],
-    'editorSuggestWidget.foreground': ['PopupFg', [0, 0, 'D4D4D4', '252526', 0]],
-    
-    // 新增V3格式必需项
-    'editorBracketMatch.background': ['BRC', [1, 1, '2F32DC', '756E58', 0]],
-    'editor.findMatchHighlightBackground': ['FND', [0, 1, '009985', '423607', 0]]
+const DEFAULT_COLORS = {
+    // 格式: [显示方式, 太字, 文字色, 背景色, 下線]
+    'BRC': [0,1,'000080','f0fbff',0],
+    'CAR': [1,0,'000000','f0fbff',0],
+    'CBK': [0,0,'000000','80ffff',0],
+    'CMT': [1,0,'008000','f0fbff',0],
+    'CTL': [1,0,'00ffff','f0fbff',0],
+    'CVL': [0,0,'ff8080','f0fbff',0],
+    'DFA': [1,0,'d20000','ffd0a2',0],
+    'DFC': [1,0,'006f00','c0fdbd',0],
+    'DFD': [1,0,'006ad5','ace9ff',0],
+    'EBK': [0,0,'000000','f3f3f3',0],
+    'EOF': [1,0,'ffff00','000000',0],
+    'EOL': [1,0,'ff8000','f0fbff',0],
+    'FN2': [1,0,'000000','ffffa0',0],
+    'FN3': [1,0,'000000','99ff99',0],
+    'FN4': [1,0,'000000','9999ff',0],
+    'FN5': [1,0,'000000','ff66ff',0],
+    'FND': [1,0,'000000','00ffff',0],
+    'HDC': [0,0,'400080','f0fbff',0],
+    'IME': [1,0,'0000ff','f0fbff',0],
+    'KW1': [1,0,'ff0000','f0fbff',0],
+    'KW2': [1,0,'0080ff','f0fbff',0],
+    'KW3': [1,0,'0080ff','f0fbff',0],
+    'KW4': [1,0,'0080ff','f0fbff',0],
+    'KW5': [1,0,'0080ff','f0fbff',0],
+    'KW6': [1,0,'0080ff','f0fbff',0],
+    'KW7': [1,0,'0080ff','f0fbff',0],
+    'KW8': [1,0,'0080ff','f0fbff',0],
+    'KW9': [1,0,'0080ff','f0fbff',0],
+    'KWA': [1,0,'0080ff','f0fbff',0],
+    'LNO': [1,0,'ff0000','efefef',0],
+    'MOD': [1,1,'ff0000','efefef',0],
+    'MRK': [1,0,'f0fbff','c08000',0],
+    'NOT': [0,0,'ffc0c0','f0fbff',0],
+    'NUM': [0,0,'0000eb','f0fbff',0],
+    'PGV': [1,0,'f0fbff','ffe6be',0],
+    'RAP': [1,0,'ff00ff','f0fbff',0],
+    'RK1': [0,0,'ff0000','f0fbff',0],
+    'RK2': [0,0,'ff0000','f0fbff',0],
+    'RK3': [0,0,'ff0000','f0fbff',0],
+    'RK4': [0,0,'ff0000','f0fbff',0],
+    'RK5': [0,0,'ff0000','f0fbff',0],
+    'RK6': [0,0,'ff0000','f0fbff',0],
+    'RK7': [0,0,'ff0000','f0fbff',0],
+    'RK8': [0,0,'ff0000','f0fbff',0],
+    'RK9': [0,0,'ff0000','f0fbff',0],
+    'RKA': [0,0,'ff0000','f0fbff',0],
+    'RUL': [1,0,'000000','efefef',0],
+    'SEL': [1,0,'c56a31','c56a31',0],
+    'SPC': [0,0,'c0c0c0','f0fbff',0],
+    'SQT': [0,0,'808040','f0fbff',0],
+    'TAB': [1,0,'808080','f0fbff',0],
+    'TXT': [1,0,'000000','f0fbff',0],
+    'UND': [1,0,'ff0000','f0fbff',0],
+    'URL': [1,0,'ff0000','f0fbff',1],
+    'VER': [0,0,'c0c0c0','f0fbff',0],
+    'WQT': [0,0,'400080','f0fbff',0],
+    'ZEN': [1,0,'c0c0c0','f0fbff',0]
+};
+
+const VSCODE_MAPPING = {
+    // VSCode属性到Sakura键的映射
+    'editor.background': 'EBK',
+    'editor.foreground': 'TXT',
+    'editorCursor.foreground': 'CAR',
+    'editor.selectionBackground': 'SEL',
+    'editor.lineHighlightBackground': 'CBK',
+    'editorLineNumber.foreground': 'LNO',
+    'editorBracketMatch.border': 'BRC',
+    'editor.findMatchHighlightBackground': 'FND',
+    'comments': 'CMT',
+    'strings': 'SQT',
+    'numbers': 'NUM',
+    'keywords': 'KW1'
 };
 
 document.getElementById('themeFile').addEventListener('change', function(e) {
@@ -38,33 +98,64 @@ document.getElementById('themeFile').addEventListener('change', function(e) {
 function convertTheme(vsTheme) {
     let config = [
         '; テキストエディタ色設定 Ver3',
+        `; Generated from: ${vsTheme.name || 'Unknown Theme'}`,
         '[SakuraColor]'
     ];
 
-    // 生成颜色配置项
-    Object.entries(COLOR_MAPPING).forEach(([vsKey, [sakuraKey, settings]]) => {
-        const color = vsTheme.colors[vsKey];
-        if (color) {
-            const [display, bold, defaultFg, defaultBg, underline] = settings;
-            const fg = color ? hexToRgb(color) : defaultFg;
-            const bg = hexToRgb(vsTheme.colors['editor.background'] || defaultBg);
-            config.push(`C[${sakuraKey}]=${display},${bold},${fg},${bg},${underline}`);
-        }
+    // 生成所有必需项
+    Object.entries(DEFAULT_COLORS).forEach(([key, defaultValues]) => {
+        const vsKey = findVSCodeKey(key);
+        const color = getColorValue(vsTheme, vsKey);
+        
+        const [display, bold, defaultFg, defaultBg, underline] = defaultValues;
+        const fg = color?.fg ? hexToRgb(color.fg) : defaultFg;
+        const bg = color?.bg ? hexToRgb(color.bg) : defaultBg;
+        
+        config.push(`C[${key}]=${display},${bold},${fg},${bg},${underline}`);
     });
 
-    // 添加必需默认项
-    config.push(
-        'C[VER]=0,0,837b65,362b00,0',
-        'C[PGV]=1,0,f0fbff,ffe6be,0'
-    );
-
     return config.join('\n');
+}
+
+function findVSCodeKey(sakuraKey) {
+    return Object.entries(VSCODE_MAPPING).find(([_, v]) => v === sakuraKey)?.[0];
+}
+
+function getColorValue(theme, vsKey) {
+    // 从colors获取
+    if (vsKey && theme.colors?.[vsKey]) {
+        return {
+            fg: theme.colors[vsKey],
+            bg: theme.colors['editor.background']
+        };
+    }
+    
+    // 从tokenColors获取
+    if (vsKey) {
+        const token = theme.tokenColors?.find(t => 
+            t.scope?.split(',').includes(vsKey)
+        );
+        if (token) {
+            return {
+                fg: token.settings?.foreground,
+                bg: token.settings?.background
+            };
+        }
+    }
+    
+    return null;
 }
 
 // HEX转RRGGBB格式
 function hexToRgb(hex) {
     if (!hex) return '000000';
-    return hex.replace('#', '').padEnd(6, '0').substring(0,6).toUpperCase();
+    // 处理缩写格式 #fff → ffffff
+    if (value.length === 3) {
+        value = value.split('').map(c => c + c).join('');
+    }
+    
+    return value.padEnd(6, '0').substring(0,6).toUpperCase();
+
 }
 
 // 保持原有预览功能
