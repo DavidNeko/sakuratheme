@@ -200,12 +200,17 @@ function hexToRgb(hex) {
     if (value.length === 3) {
         value = value.split('').map(c => c + c).join('');
     }
+
+    // 填充至6位并转为小写
+    const fullHex = value.padEnd(6, '0').substring(0,6).toLowerCase();
+
+    // 分解为 R-G-B 并重组为 B-G-R
+    const r = fullHex.substring(0, 2);
+    const g = fullHex.substring(2, 4);
+    const b = fullHex.substring(4, 6);
     
     // 填充和截断
-    return value
-        .padEnd(6, '0')    // 确保至少6字符
-        .substring(0, 6)    // 最多取6字符
-        .toLowerCase();     // 统一大写
+    return `${b}${g}${r}`; // BGR 顺序
 }
 
 // 保持原有预览功能
