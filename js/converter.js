@@ -86,8 +86,9 @@ document.getElementById('themeFile').addEventListener('change', function(e) {
         try {
             // 添加JSON验证
             const rawData = event.target.result;
-            if (!rawData.includes('"colors"')) {
-                throw new Error('无效的主题文件：缺少必要的colors字段');
+            // 预验证JSON结构
+            if (!validateThemeJSON(rawData)) {
+                throw new Error('无效的主题文件格式');
             }
             
             const vsTheme = JSON.parse(rawData);
@@ -100,12 +101,25 @@ document.getElementById('themeFile').addEventListener('change', function(e) {
             enableDownload(sakuraConfig);
             displayColorGrid(vsTheme.colors);
         } catch (error) {
-            console.error('完整错误堆栈:', error);
-            alert(`文件解析失败：${error.message}\n错误类型：${error.name}`);
+            showErrorDetails(error);
         }
     };
     reader.readAsText(file);
 });
+
+function validateThemeJSON(raw) {
+    return raw.includes('"colors"') && 
+           raw.includes('"name"');
+}
+
+function showErrorDetails(error) {
+    console.error('错误详情:', {
+        message: error.message,
+        stack: error.stack,
+        input: event.target.result
+    });
+    alert(`转换失败: ${error.message}\n详细日志已输出到控制台`);
+}
 
 // 增加默认背景色常量
 const DEFAULT_BG = 'FFFFFF';
@@ -128,11 +142,16 @@ function convertTheme(vsTheme) {
     // 生成所有必需项
     Object.entries(DEFAULT_COLORS).forEach(([key, defaultValues]) => {
         const vsKey = findVSCodeKey(key);
-        const color = getColorValue(vsTheme, vsKey);
+        const color = getColorValue(cleanTheme, vsKey);
         
         const [display, bold, defaultFg, defaultBg, underline] = defaultValues;
-        const fg = color?.fg ? hexToRgb(color.fg) : defaultFg;
-        const bg = color?.bg ? hexToRgb(color.bg) : defaultBg;
+        
+        // 安全获取颜色值
+        const safeFg = color?.fg ? color.fg.toString() : defaultFg;
+        const safeBg = color?.bg ? color.bg.toString() : defaultBg;
+        
+        const fg = hexToRgb(safeFg);
+        const bg = hexToRgb(safeBg);
         
         config.push(`C[${key}]=${display},${bold},${fg},${bg},${underline}`);
     });
@@ -173,14 +192,20 @@ function getColorValue(theme, vsKey) {
 
 // HEX转RRGGBB格式
 function hexToRgb(hex) {
-    if (!hex) return '000000';
-    // 处理缩写格式 #fff → ffffff
+    // 添加类型检查和安全处理
+    if (typeof hex !== 'string') hex = '';
+    let value = hex.replace(/#/g, '');  // 移除所有#符号
+    
+    // 处理缩写格式
     if (value.length === 3) {
         value = value.split('').map(c => c + c).join('');
     }
     
-    return value.padEnd(6, '0').substring(0,6).toUpperCase();
-
+    // 填充和截断
+    return value
+        .padEnd(6, '0')    // 确保至少6字符
+        .substring(0, 6)    // 最多取6字符
+        .toUpperCase();     // 统一大写
 }
 
 // 保持原有预览功能
