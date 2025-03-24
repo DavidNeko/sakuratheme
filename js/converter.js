@@ -84,24 +84,39 @@ document.getElementById('themeFile').addEventListener('change', function(e) {
     const reader = new FileReader();
     reader.onload = function(event) {
         try {
-            const vsTheme = JSON.parse(event.target.result);
+            // 添加JSON验证
+            const rawData = event.target.result;
+            if (!rawData.includes('"colors"')) {
+                throw new Error('无效的主题文件：缺少必要的colors字段');
+            }
+            
+            const vsTheme = JSON.parse(rawData);
+            // 强制初始化关键字段
+            vsTheme.colors = vsTheme.colors || {};
+            vsTheme.tokenColors = vsTheme.tokenColors || [];
+            
             const sakuraConfig = convertTheme(vsTheme);
             updatePreview(vsTheme.colors);
             enableDownload(sakuraConfig);
             displayColorGrid(vsTheme.colors);
         } catch (error) {
-            alert('无效的主题文件: ' + error.message);
+            console.error('完整错误堆栈:', error);
+            alert(`文件解析失败：${error.message}\n错误类型：${error.name}`);
         }
     };
     reader.readAsText(file);
 });
 
+// 增加默认背景色常量
+const DEFAULT_BG = 'FFFFFF';
+
 function convertTheme(vsTheme) {
     // 过滤VSCode特殊字段
+    // 确保tokenColors存在
     const cleanTheme = {
         name: vsTheme.name,
         colors: vsTheme.colors || {},
-        tokenColors: vsTheme.tokenColors || []
+        tokenColors: vsTheme.tokenColors || []  // 明确初始化
     };
     
     let config = [
@@ -130,21 +145,29 @@ function findVSCodeKey(sakuraKey) {
 }
 
 function getColorValue(theme, vsKey) {
+    // 添加安全访问
+    const safeTokenColors = theme.tokenColors || [];
+    
     // 优先从colors获取
     if (vsKey && theme.colors[vsKey]) {
         return {
             fg: theme.colors[vsKey],
-            bg: theme.colors['editor.background']
+            bg: theme.colors['editor.background'] || DEFAULT_BG
         };
     }
     
-    // 从tokenColors获取
-    const token = theme.tokenColors.find(t => 
-        t.scope?.split(',').includes(vsKey)
-    );
+    // 从tokenColors获取（添加空值保护）
+    const token = safeTokenColors.find(t => {
+        try {
+            return t.scope?.split(',').includes(vsKey);
+        } catch {
+            return false;
+        }
+    });
+    
     return token?.settings ? {
         fg: token.settings.foreground,
-        bg: token.settings.background
+        bg: token.settings.background || DEFAULT_BG
     } : null;
 }
 
